@@ -1,3 +1,15 @@
+single_digit_strings = {
+    'one': '1', '1': '1',
+    'two': '2', '2': '2',
+    'three': '3', '3': '3',
+    'four': '4', '4': '4',
+    'five': '5', '5': '5',
+    'six': '6', '6': '6',
+    'seven': '7', '7': '7',
+    'eight': '8', '8': '8',
+    'nine': '9', '9': '9'
+}
+
 input_strings = """
 2911threeninesdvxvheightwobm
 3three16xsxhpnqmzmnine8one
@@ -1002,25 +1014,36 @@ dhfbhone4fourlgzftg
 """
 
 def split_string(s):
-    if not s:
-        return []
+    first_position = len(s)
+    last_position = -1
+    first_key = None
+    last_key = None
 
-    allNumbersInString = ''
+    for key in single_digit_strings.keys():
+        current_position = 0
+        while current_position < len(s):
+            position = s.find(key, current_position)
+            if position == -1:
+                break
+            if position < first_position:
+                first_position = position
+                first_key = key
+            if position >= last_position:
+                last_position = position
+                last_key = key
+            current_position = position + 1  # Move to the next character after the current found key
+    
+    if first_key is None or last_key is None:
+        return 0
 
-    for char in s:
-        if (char.isdigit()):
-            allNumbersInString += char
-    firstAndLastDigits = ''
-    firstDigit = ''
-    firstDigit = allNumbersInString[0]
-    lastDigit = allNumbersInString[-1]
-    firstAndLastDigits = firstDigit + lastDigit
-    return int(firstAndLastDigits)
-
+    first_value = single_digit_strings[first_key]
+    last_value = single_digit_strings[last_key]
+    return int(first_value + last_value)
 
 total = 0
 for line in input_strings.strip().split('\n'):
     result = split_string(line)
+    print(result)
     total+=result
-    print(total)
+    # print(total)
 print(total)
